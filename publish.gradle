@@ -18,8 +18,8 @@ if (project.ext.has("exoplayerPublishEnabled")
         artifactId = releaseArtifact
         description = releaseDescription
         version = releaseVersion
-        repoName = getBintrayRepo()
-        userOrg = 'google'
+        repoName = 'exoplayer'
+        userOrg = 'kiall'
         groupId = 'com.google.android.exoplayer'
         website = 'https://github.com/google/ExoPlayer'
     }
