@@ -223,7 +223,7 @@ public final class MimeTypes {
         || APPLICATION_SUBRIP.equals(mimeType) || APPLICATION_TTML.equals(mimeType)
         || APPLICATION_TX3G.equals(mimeType) || APPLICATION_MP4VTT.equals(mimeType)
         || APPLICATION_RAWCC.equals(mimeType) || APPLICATION_VOBSUB.equals(mimeType)
-        || APPLICATION_PGS.equals(mimeType)) {
+        || APPLICATION_PGS.equals(mimeType) || APPLICATION_DVBSUBS.equals(mimeType)) {
       return C.TRACK_TYPE_TEXT;
     } else if (APPLICATION_ID3.equals(mimeType)
         || APPLICATION_EMSG.equals(mimeType)

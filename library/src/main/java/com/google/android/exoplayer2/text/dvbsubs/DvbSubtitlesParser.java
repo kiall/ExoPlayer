@@ -414,7 +414,10 @@ public class DvbSubtitlesParser {
     private SubtitleService subtitleService;
 
     DvbSubtitlesParser() {
-        this(1);
+        // So - I didn't even try find a way to set this, I assume I'll need to replace the
+        // SubtitleDecoderFactory.DEFAULT, however different streams are likely to need different
+        // values.. So, I'm not sure that would work..
+        this(2);
     }
 
     DvbSubtitlesParser(int subtitlePge) {
@@ -1316,7 +1319,6 @@ public class DvbSubtitlesParser {
     }
 
     public Bitmap dvbSubsDecode(byte[] input, int inputSize) {
-
         /* process PES PACKET. ETSI EN 300 743 7.1
 
                           SYNTAX                  SIZE                SEMANTICS
@@ -1336,22 +1338,18 @@ public class DvbSubtitlesParser {
         } else {
             return null;
         }
-        if (tsStream.readBits(8) != 0x20) {   // data_identifier
-            return null;
-        }
-        if (tsStream.readBits(8) != 0x00) {   // subtitle_stream_id
-            return null;
-        }
-
-        if (BuildConfig.DEBUG) Log.d(TAG,"New PES subtitle packet.");
 
         int sync = tsStream.readBits(8);
         // test for segment Sync Byte and account for possible additional wordalign byte in Object data segment
         while (sync == 0x0f || (sync == 0x00 && (sync = tsStream.readBits(8)) == 0x0f)) {
             parseSubtitlingSegment();
-            sync = tsStream.readBits(8);
+
+            if (tsStream.bitsLeft() == 0) {
+                break;
+            }
         }
-        if (sync == 0xff) {                   // end_of_PES_data_field_marker
+
+        if (sync == 0xff || tsStream.bitsLeft() == 0) {                   // end_of_PES_data_field_marker
             // paint the current Subtitle definition
             if (subtitleService.pageComposition != null) {
 
